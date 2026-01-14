@@ -1,20 +1,25 @@
-package com.example.ToDo;
+package com.example.ToDo.entity;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class Task {
-    private int id;
+    @Id
+    private String id;
     private String task;
     private Boolean state;
     public Task(){}
-    public Task(int id,String task,Boolean state){
+    public Task(String id,String task,Boolean state){
         this.id=id;
         this.task=task;
         this.state=state;
     }
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -1,6 +1,6 @@
 package com.example.ToDo.controller;
 
-import com.example.ToDo.Task;
+import com.example.ToDo.entity.Task;
 import com.example.ToDo.service.ToDoListService;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,49 +1,54 @@
 package com.example.ToDo.service;
 
-import com.example.ToDo.Task;
-import org.jspecify.annotations.NonNull;
+import com.example.ToDo.entity.Task;
+import com.example.ToDo.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ToDoListService {
-    private ArrayList<Task> list = new ArrayList<>();
-    private int count = 1;
+    private final TaskRepository repo;
 
+public ToDoListService(TaskRepository repo){
+    this.repo=repo;
+}
 
-    public Task addTask(@NonNull Task task) {
-        task.setId(this.count);
-        list.add(task);
-        count++;
-        return task;
+    public Task addTask(Task task) {
+        return repo.save(task);
     }
 
-    public ArrayList<Task> getAllTasks(){
-        return list;
+    public List<Task> getAllTasks(){
+        return repo.findAll();
     }
 
-    public Task getTaskById(int id){
-        return list.stream()
-                .filter(t -> t.getId() == id)
-                .findFirst()
-                .orElse(null);
+    public Task getTaskById(String id){
+
+         Optional<Task> task= repo.findById(id);
+         return task.orElse(null);
 
     }
 
-    public Task updateTask(int id, Task task){
-        Task t = getTaskById(id);
-        if (t != null) {
-            t.setTask(task.getTask());
-            t.setState(task.getState());
+    public Task updateTask(String id, Task task){
+        Optional<Task>t = repo.findById(id);
+        if (t.isPresent()) {
+            Task ta= t.get();
+            ta.setTask(task.getTask());
+            ta.setState(task.getState());
+            return repo.save(ta);
         }
-        return t;
+        return null;
     }
 
-    public Task deleteTask(int id){
-        Task t = getTaskById(id);
-        if(t != null) list.remove(t);
-        return t;
+    public Task deleteTask(String id){
+        Optional<Task> task=repo.findById(id);
+        if(task.isPresent()){
+            repo.deleteById(id);
+            return task.get();
+        }
+        return null;
     }
 
 
