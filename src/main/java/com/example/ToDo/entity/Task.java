@@ -3,7 +3,7 @@ package com.example.ToDo.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collation = "tasks")
 public class Task {
     @Id
     private String id;

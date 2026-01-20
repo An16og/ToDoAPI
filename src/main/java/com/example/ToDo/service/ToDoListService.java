@@ -24,22 +24,22 @@ public ToDoListService(TaskRepository repo){
         return repo.findAll();
     }
 
-    public Task getTaskById(String id){
+    public Optional<Task> getTaskById(String id){
 
-         Optional<Task> task= repo.findById(id);
-         return task.orElse(null);
+         return repo.findById(id);
 
     }
 
-    public Task updateTask(String id, Task task){
+    public Optional<Task> updateTask(String id, Task task){
         Optional<Task>t = repo.findById(id);
         if (t.isPresent()) {
             Task ta= t.get();
             ta.setTask(task.getTask());
             ta.setState(task.getState());
-            return repo.save(ta);
+           return Optional.of(repo.save(ta));
+
         }
-        return null;
+        return Optional.empty();
     }
 
     public Task deleteTask(String id){
@@ -47,6 +47,7 @@ public ToDoListService(TaskRepository repo){
         if(task.isPresent()){
             repo.deleteById(id);
             return task.get();
+
         }
         return null;
     }
